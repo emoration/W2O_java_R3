@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--对应class位置-->
+<mapper namespace="com.example.dao.CityMapper">
+    <!--对应class内的方法、返回结果，以及映射语句-->
+    <select id="getCityList" resultType="com.example.pojo.City">
+        select * from mybatis.City
+    </select>
+    <select id="getCity" parameterType="String" resultType="com.example.pojo.City">
+        select * from mybatis.City where cityName = #{cityName}
+    </select>
+    <insert id="addCity" parameterType="map">
+        insert into mybatis.city (cityName, cityId, weather0_id, weather1_id, weather2_id) values (#{cityName}, #{cityId}, #{weather0_id}, #{weather1_id}, #{weather2_id});
+    </insert>
+    <delete id="deleteCity" parameterType="String">
+        delete from mybatis.city where cityName = #{cityName};
+    </delete>
+</mapper>
