@@ -11,7 +11,10 @@
     <select id="getCity" parameterType="String" resultType="com.example.pojo.City">
         select * from mybatis.City where cityName = #{cityName}
     </select>
-    <insert id="addCity" parameterType="map">
+    <insert id="addCityByMap" parameterType="map">
+        insert into mybatis.city (cityName, cityId, weather0_id, weather1_id, weather2_id) values (#{cityName}, #{cityId}, #{weather0_id}, #{weather1_id}, #{weather2_id});
+    </insert>
+    <insert id="addCity" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.pojo.City">
         insert into mybatis.city (cityName, cityId, weather0_id, weather1_id, weather2_id) values (#{cityName}, #{cityId}, #{weather0_id}, #{weather1_id}, #{weather2_id});
     </insert>
     <delete id="deleteCity" parameterType="String">

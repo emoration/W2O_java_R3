@@ -26,7 +26,11 @@ public class Demo {
     }
 
     public JSONObject queryCityToday(String cityName) {
-        City city = cityMapper.getCity("fuzhou");
+        cityName = cityName.toLowerCase();
+        if (!isCityExist(cityName)) {
+            return null;
+        }
+        City city = cityMapper.getCity(cityName);
 //        System.out.println(city);
         int weather0_id = city.getWeather0_id();
         Weather weather = weatherMapper.getWeather(weather0_id);
@@ -35,7 +39,11 @@ public class Demo {
     }
 
     public JSONObject queryCityTomorrow(String cityName) {
-        City city = cityMapper.getCity("fuzhou");
+        if (!isCityExist(cityName)) {
+            return null;
+        }
+        cityName = cityName.toLowerCase();
+        City city = cityMapper.getCity(cityName);
 //        System.out.println(city);
         int weather1_id = city.getWeather1_id();
         Weather weather = weatherMapper.getWeather(weather1_id);
@@ -44,7 +52,11 @@ public class Demo {
     }
 
     public JSONArray queryCityDays(String cityName) {
-        City city = cityMapper.getCity("fuzhou");
+        if (!isCityExist(cityName)) {
+            return null;
+        }
+        cityName = cityName.toLowerCase();
+        City city = cityMapper.getCity(cityName);
 //        System.out.println(city);
         int weather0_id = city.getWeather0_id();
         int weather1_id = city.getWeather1_id();
@@ -56,10 +68,13 @@ public class Demo {
         return jsonArray;
     }
 
-    public void update(String cityName) {
+    public boolean updateCity(String cityName) {
+        if (!isCityExist(cityName)) {
+            return false;
+        }
+        cityName = cityName.toLowerCase();
         City city = cityMapper.getCity(cityName);
-        String cityId = WeatherAPI.getCityId(cityName);
-        JSONObject weatherJSONObject = WeatherAPI.getWeather(cityId);
+        JSONObject weatherJSONObject = WeatherAPI.getWeather(city.getCityId());
         JSONArray weatherJSONObject_daily = (JSONArray) weatherJSONObject.get("daily");
         JSONObject weatherJSONObject_daily_0 = (JSONObject)weatherJSONObject_daily.get(0);
         weatherJSONObject_daily_0.put("id", city.getWeather0_id());
@@ -70,16 +85,51 @@ public class Demo {
         JSONObject weatherJSONObject_daily_2 = (JSONObject)weatherJSONObject_daily.get(2);
         weatherJSONObject_daily_2.put("id", city.getWeather2_id());
         weatherMapper.updateWeatherByMap(weatherJSONObject_daily_2);
-        System.out.println(weatherJSONObject_daily_2);
+        sqlSession.commit();
+        return true;
     }
 
-    public void updateAll() {
+    public boolean addCity(String cityName) {
+        cityName = cityName.toLowerCase();
+        if (isCityExist(cityName)) {
+            return false;
+        }
+        City city = new City();
+        city.setCityName(cityName);
+        String cityId = WeatherAPI.getCityId(cityName);
+        city.setCityId(cityId);
+        Weather weather = new Weather(-1,"NULL",-1,-1,"NULL");
+        weatherMapper.addWeather(weather);
+        city.setWeather0_id(weather.getId());
+        weather = new Weather(-1,"NULL",-1,-1,"NULL");
+        weatherMapper.addWeather(weather);
+        city.setWeather1_id(weather.getId());
+        weather = new Weather(-1,"NULL",-1,-1,"NULL");
+        weatherMapper.addWeather(weather);
+        city.setWeather2_id(weather.getId());
+        cityMapper.addCity(city);
+        sqlSession.commit();
+        return true;
     }
 
-    public void addCity(String cityName) {
+    public boolean deleteCity(String cityName) {
+        cityName = cityName.toLowerCase();
+        if (!isCityExist(cityName)) {
+            return false;
+        }
+        City city = cityMapper.getCity(cityName);
+        weatherMapper.deleteWeather(city.getWeather0_id());
+        weatherMapper.deleteWeather(city.getWeather1_id());
+        weatherMapper.deleteWeather(city.getWeather2_id());
+        cityMapper.deleteCity(cityName);
+        sqlSession.commit();
+        return true;
     }
 
-    public void deleteCity(String cityName) {
+    public boolean isCityExist(String cityName) {
+        cityName = cityName.toLowerCase();
+        City city = cityMapper.getCity(cityName);
+        return city != null;
     }
 
 

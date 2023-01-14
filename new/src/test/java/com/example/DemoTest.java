@@ -1,48 +1,63 @@
 package com.example;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class DemoTest {
-
+    Demo demo;
+    @Before
+    public void start() {
+        System.out.println("begin");
+        demo = new Demo();
+    }
+    @After
+    public void close() {
+        System.out.println("end");
+        demo.close();
+    }
     @Test
     public void queryCityToday() {
-        Demo demo = new Demo();
         System.out.println(demo.queryCityToday("fuzhou"));
-        demo.close();
     }
 
     @Test
     public void queryCityTomorrow() {
-        Demo demo = new Demo();
         System.out.println(demo.queryCityTomorrow("fuzhou"));
-        demo.close();
     }
 
     @Test
     public void queryCityDays() {
-        Demo demo = new Demo();
         System.out.println(demo.queryCityDays("fuzhou"));
-        demo.close();
     }
 
     @Test
-    public void update() {
+    public void updateCity() {
         Demo demo = new Demo();
-        demo.update("fuzhou");
+        if (demo.updateCity("xiamen")) {
+            System.out.println("success");
+        } else {
+            System.out.println("fail, existed");
+        }
         demo.close();
-    }
-
-    @Test
-    public void updateAll() {
     }
 
     @Test
     public void addCity() {
+        if (demo.addCity("xiamen")) {
+            System.out.println("success");
+        } else {
+            System.out.println("fail, existed");
+        }
     }
 
     @Test
     public void deleteCity() {
+        demo.deleteCity("xiamen");
+    }
+
+    @Test
+    public void isCityExist() {
+        System.out.println(demo.isCityExist("shanghai"));
     }
 }

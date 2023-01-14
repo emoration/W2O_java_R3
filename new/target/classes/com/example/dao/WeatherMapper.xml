@@ -11,10 +11,10 @@
     <select id="getWeather" resultType="com.example.pojo.Weather" parameterType="int">
         select * from mybatis.weather where id = #{id}
     </select>
-    <insert id="addWeather" parameterType="com.example.pojo.Weather">
-        insert into mybatis.weather (id, fxDate, tempMax, tempMin, textDay) values (#{id}, #{fxDate}, #{tempMax}, #{tempMin}, #{textDay});
+    <insert id="addWeather" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.pojo.Weather">
+        insert into mybatis.weather (fxDate, tempMax, tempMin, textDay) values (#{fxDate}, #{tempMax}, #{tempMin}, #{textDay});
     </insert>
-    <insert id="addWeatherByMap" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addWeatherByMap" parameterType="map">
         insert into mybatis.weather (fxDate, tempMax, tempMin, textDay) values (#{fxDate}, #{tempMax}, #{tempMin}, #{textDay});
     </insert>
     <update id="updateWeather" parameterType="com.example.pojo.Weather">

@@ -1,6 +1,5 @@
 package com.example.dao;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.pojo.City;
 import com.example.utils.MybatisUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -42,7 +41,7 @@ public class CityMapperTest {
         map.put("weather0_id", "2");
         map.put("weather1_id", "3");
         map.put("weather2_id", "4");
-        int res = cityMapper.addCity(map);
+        int res = cityMapper.addCityByMap(map);
         System.out.println(res);
         sqlSession.commit();
         sqlSession.close();

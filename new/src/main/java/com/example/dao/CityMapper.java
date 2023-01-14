@@ -9,6 +9,7 @@ public interface CityMapper {
     List<City> getCityList();
 
     City getCity(String cityName);
-    int addCity(Map<String,Object> map);
+    int addCityByMap(Map<String,Object> map);
+    int addCity(City city);
     int deleteCity(String cityName);
 }
